@@ -32,7 +32,6 @@ unpack () {
 
 repack () {
   initRepack
-
   cd ${DIR_UNTAR}
   for file in *
   do
@@ -42,9 +41,28 @@ repack () {
     cd ..
     echo "Processing $file directory.. End";
   done
+  cd ..
+}
 
+NEXUS_BASEURL='http://nexus.agrica.loc'
+NEXUS_PASSWORD='admin:admin123'
+GROUP_ID="org.prometheus"
+
+mavenDeploy () {
+  cd ${DIR_RETAR}
+  for file in *
+  do
+    echo "Processing $file repack..";
+    readarray -d - -t arr <<<"${file}"
+    artifactId=${arr[0]}
+    echo "Artefact=${artifactId}"
+    echo curl -v -F r=releases -F hasPom=false -F e=jar -F g=${GROUP_ID} -F a=${artifactId} -F v=${VERSION} -F p=jar -F file=@p${file} -u ${NEXUS_PASSWORD} ${NEXUS_BASEURL}/nexus/service/local/artifact/maven/content
+    echo "Processing $file repack.. End";
+  done
+  cd ..
 }
 
 init
 unpack
 repack
+mavenDeploy

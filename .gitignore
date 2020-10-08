@@ -1,0 +1,8 @@
+# Data
+/untar
+/retar
+*.tar.gz
+
+# IDEA
+*.iml
+.idea

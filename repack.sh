@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 VERSION="0.21.0"
 DIR_HOME=$PWD
@@ -7,19 +7,33 @@ DIR_UNTAR="working-untar"
 DIR_RETAR="final"
 
 init () {
-  initUnpack
-  initRepack
+  cleanWorking
+  cleanFinal
 }
 
 initUnpack () {
+  cleanWorking
+}
+
+cleanTodo () {
+  echo "Clean Todo Directory $DIR_TODO"
+  rm -rf ${DIR_TODO}/*
+  mkdir -p ${DIR_TODO}
+}
+
+cleanWorking () {
+  echo "Clean Working Directory $DIR_UNTAR"
   rm -rf ${DIR_UNTAR}
   mkdir -p ${DIR_UNTAR}
 }
 
-initRepack () {
+
+cleanFinal () {
+  echo "Clean Final Directory $DIR_RETAR"
   rm -rf ${DIR_RETAR}/*.tar.gz
   mkdir -p ${DIR_RETAR}
 }
+
 # curl https://github.com/prometheus/prometheus/releases/download/v${VERSION}/prometheus-${VERSION}.linux-amd64.tar.gz
 # curl https://github.com/prometheus/alertmanager/releases/download/v${VERSION}/alertmanager-${VERSION}.linux-amd64.tar.gz
 # PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases
@@ -53,7 +67,6 @@ unpackTarGz () {
 }
 
 repack () {
-  initRepack
   cd ${DIR_UNTAR}
   for file in *
   do
@@ -87,4 +100,6 @@ mavenDeploy () {
 init
 unpack
 repack
+cleanWorking
+cleanTodo
 # mavenDeploy

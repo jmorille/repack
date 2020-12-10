@@ -1,8 +1,10 @@
 #!/bin/bash
 
 VERSION="0.21.0"
-DIR_UNTAR="untar"
-DIR_RETAR="retar"
+DIR_HOME=$PWD
+DIR_TODO="todo"
+DIR_UNTAR="working-untar"
+DIR_RETAR="final"
 
 init () {
   initUnpack
@@ -11,18 +13,38 @@ init () {
 
 initUnpack () {
   rm -rf ${DIR_UNTAR}
-  mkdir ${DIR_UNTAR}
+  mkdir -p ${DIR_UNTAR}
 }
 
 initRepack () {
-  rm -rf ${DIR_RETAR}
-  mkdir ${DIR_RETAR}
+  rm -rf ${DIR_RETAR}/*.tar.gz
+  mkdir -p ${DIR_RETAR}
 }
 # curl https://github.com/prometheus/prometheus/releases/download/v${VERSION}/prometheus-${VERSION}.linux-amd64.tar.gz
 # curl https://github.com/prometheus/alertmanager/releases/download/v${VERSION}/alertmanager-${VERSION}.linux-amd64.tar.gz
+# PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases
 
 unpack () {
-  for file in *.tar.gz
+  echo "Woring DIrectory $DIR_HOME"
+  unpackTarGz
+  unpackBinary
+}
+
+unpackBinary () {
+  cd ${DIR_TODO}
+  for file in *.amd64
+  do
+    echo "Processing $file file..";
+    mkdir -p $DIR_HOME/${DIR_UNTAR}/${file}
+    cp ${file} $DIR_HOME/${DIR_UNTAR}/${file}
+    echo "Processing $file file.. End";
+  done
+  cd $DIR_HOME
+}
+
+
+unpackTarGz () {
+  for file in ${DIR_TODO}/*.tar.gz
   do
     echo "Processing $file file..";
     tar -xzf ${file} -C ${DIR_UNTAR}/
@@ -65,4 +87,4 @@ mavenDeploy () {
 init
 unpack
 repack
-mavenDeploy
+# mavenDeploy

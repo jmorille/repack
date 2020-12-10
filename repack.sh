@@ -13,7 +13,7 @@ downloadHelp() {
   echo "---    * alertmanager"
   echo "---    * node_exporter"
   echo "--- PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases"
-  echo "--- Apache Exporter  : https://github.com/Lusitaniae/apache_exporter"
+  echo "--- Apache Exporter  : https://github.com/Lusitaniae/apache_exporter/releases"
   echo "--- ---------------------------------------------- ---"
 }
 

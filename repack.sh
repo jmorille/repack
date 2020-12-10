@@ -9,7 +9,11 @@ DIR_RETAR="final"
 downloadHelp() {
   echo "--- ---------------------------------------------- ---"
   echo "--- Prometheus       : https://prometheus.io/download/"
+  echo "---    * prometheus"
+  echo "---    * alertmanager"
+  echo "---    * node_exporter"
   echo "--- PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases"
+  echo "--- Apache Exporter  : https://github.com/Lusitaniae/apache_exporter"
   echo "--- ---------------------------------------------- ---"
 }
 

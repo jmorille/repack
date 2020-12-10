@@ -1,9 +1,12 @@
 # Data
 /todo
 /final
-/untar
-/retar
+/working-untar
+
+# Project
 *.tar.gz
+*.zip
+*.amd64
 
 # IDEA
 *.iml

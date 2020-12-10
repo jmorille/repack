@@ -16,20 +16,26 @@ initUnpack () {
 }
 
 cleanTodo () {
-  echo "Clean Todo Directory $DIR_TODO"
+  echo "--- Clean Todo Directory $DIR_TODO"
+  echo "--- ---------------------------------------------- ---"
+  cd ${DIR_HOME}
   rm -rf ${DIR_TODO}/*
   mkdir -p ${DIR_TODO}
 }
 
 cleanWorking () {
-  echo "Clean Working Directory $DIR_UNTAR"
+  echo "--- Clean Working Directory $DIR_UNTAR"
+  echo "--- ---------------------------------------------- ---"
+  cd ${DIR_HOME}
   rm -rf ${DIR_UNTAR}
   mkdir -p ${DIR_UNTAR}
 }
 
 
 cleanFinal () {
-  echo "Clean Final Directory $DIR_RETAR"
+  echo "--- Clean Final Directory $DIR_RETAR"
+  echo "--- ---------------------------------------------- ---"
+  cd ${DIR_HOME}
   rm -rf ${DIR_RETAR}/*.tar.gz
   mkdir -p ${DIR_RETAR}
 }
@@ -39,44 +45,82 @@ cleanFinal () {
 # PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases
 
 unpack () {
-  echo "Woring DIrectory $DIR_HOME"
+  echo "Woring Directory $DIR_HOME"
   unpackTarGz
+  unpackZip
   unpackBinary
 }
 
 unpackBinary () {
   cd ${DIR_TODO}
-  for file in *.amd64
+  for file in *.amd64;
   do
-    echo "Processing $file file..";
+    [ -e "$file" ] || continue
+    echo "--- Processing Binary $file file.."
+    echo "--- ---------------------------------------------- ---"  
     mkdir -p $DIR_HOME/${DIR_UNTAR}/${file}
     cp ${file} $DIR_HOME/${DIR_UNTAR}/${file}
-    echo "Processing $file file.. End";
+    rm -rf ${file}
+    echo "--- Processing Binary $file file.. End";
+    echo "--- ---------------------------------------------- ---"  
   done
-  cd $DIR_HOME
+  cd ${DIR_HOME}
 }
 
 
 unpackTarGz () {
-  for file in ${DIR_TODO}/*.tar.gz
+  echo "--- ---------------------------------------------- ---"
+  echo "---                    Unpack TAR GZ               ---"
+  echo "--- ---------------------------------------------- ---"  
+  for file in ${DIR_TODO}/*.tar.gz;
   do
-    echo "Processing $file file..";
-    tar -xzf ${file} -C ${DIR_UNTAR}/
-    echo "Processing $file file.. End";
+    [ -e "$file" ] || continue
+    echo "--- Unpack Tar.gz $file file..";
+    echo "--- ---------------------------------------------- ---"  
+    tar -xzf ${file} -C ${DIR_HOME}/${DIR_UNTAR}/
+    rm -rf ${file}
+    echo "--- Unpack Tar.gz $file file.. End";
+    echo "--- ---------------------------------------------- ---"  
   done
+  cd ${DIR_HOME}
 }
 
-repack () {
-  cd ${DIR_UNTAR}
-  for file in *
+unpackZip () {
+  echo "--- ---------------------------------------------- ---"
+  echo "---                    Unpack ZIP                  ---"
+  echo "--- ---------------------------------------------- ---"  
+  for file in ${DIR_TODO}/*.zip;
   do
-    echo "Processing $file directory..";
-    cd ${file}
-    tar -czvf ../../${DIR_RETAR}/${file}.tar.gz *
-    cd ..
-    echo "Processing $file directory.. End";
+    [ -e "$file" ] || continue
+    echo "--- Unpack Zip $file file..";
+    echo "--- ---------------------------------------------- ---"  
+    unzip ${file} -d ${DIR_HOME}/${DIR_UNTAR}/
+    rm -rf ${file}
+    echo "--- Unpack Zip $file file.. End";
+    echo "--- ---------------------------------------------- ---"  
   done
-  cd ..
+  cd ${DIR_HOME}
+}
+
+
+repack () {
+  echo "--- ---------------------------------------------- ---"
+  echo "---                    Repack                      ---"
+  echo "--- ---------------------------------------------- ---"  
+  cd  ${DIR_HOME}/${DIR_UNTAR}
+  for file in *;
+  do
+    [ -d "$file" ] || continue
+    echo "--- Repack $file directory..";
+    echo "--- ---------------------------------------------- ---"  
+    cd ${DIR_HOME}/${DIR_UNTAR}/${file}
+    tar -czvf ${DIR_HOME}/${DIR_RETAR}/${file}.tar.gz *
+    cd  ${DIR_HOME}/${DIR_UNTAR}
+    #rm -rf ${file}
+    echo "--- Repack $file directory.. End";
+    echo "--- ---------------------------------------------- ---"  
+  done
+  cd ${DIR_HOME}
 }
 
 NEXUS_BASEURL='http://nexus.agrica.loc'

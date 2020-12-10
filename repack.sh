@@ -6,7 +6,15 @@ DIR_TODO="todo"
 DIR_UNTAR="working-untar"
 DIR_RETAR="final"
 
+downloadHelp() {
+  echo "--- ---------------------------------------------- ---"
+  echo "--- Prometheus       : https://prometheus.io/download/"
+  echo "--- PHP-FPM Exporter : https://github.com/bakins/php-fpm-exporter/releases"
+  echo "--- ---------------------------------------------- ---"
+}
+
 init () {
+  downloadHelp
   cleanWorking
   cleanFinal
 }
